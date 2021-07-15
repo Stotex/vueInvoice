@@ -1,13 +1,12 @@
 <template>
     <div class="home container">
-
         <div class="header flex">
             <div class="left flex flex-column">
                 <h1>Invoices</h1>
                 <span>There are 3 total invoices</span>
             </div>
             <div class="right flex">
-                <div @click="toggleFilterMenu" class="filter flex" >
+                <div @click="toggleFilterMenu" class="filter flex">
                     <span>Filter by status</span>
                     <img src="@/assets/icon-arrow-down.svg" alt="">
                     <ul v-show="filterMenu" class="filter-menu">
@@ -25,15 +24,24 @@
                 </div>
             </div>
         </div>
+        <div v-if="invoiceData.length > 0">
+            <Invoice v-for="(invoice, index) in invoiceData" v-bind:invoice="invoice" :key="index" />
+        </div>
+        <div v-else class="empty flex flex-column">
+            <img src="@/assets/illustration-empty.svg"/>
+            <h3>There is nothing here</h3>
+            <p>Create a new invoice by clicking the New Invoice button</p>
+        </div>
     </div>
 </template>
 
 <script>
-import {mapMutations} from 'vuex';
+import Invoice from "../components/Invoice";
+import {mapMutations, mapState} from 'vuex';
 
 export default {
     name: "Home",
-    components: {},
+    components: {Invoice},
     data() {
         return {
             filterMenu: null,
@@ -49,6 +57,9 @@ export default {
             this.filterMenu = !this.filterMenu;
         }
     },
+    computed: {
+        ...mapState(["invoiceData"])
+    }
 };
 </script>
 
